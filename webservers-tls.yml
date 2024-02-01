@@ -1,3 +1,5 @@
+#!/usr/bin/env ansible-playbook
+# This playbook is executable as a script.
 ---
 - name: Configure webserver with Nginx and TLS
   hosts: webservers
