@@ -1,3 +1,4 @@
 .vagrant/
 .vscode/
 aws_credential.txt
+.DS_Store
