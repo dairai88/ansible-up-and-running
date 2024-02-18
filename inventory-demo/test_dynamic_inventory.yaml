@@ -1,0 +1,8 @@
+---
+- name: Ansible Test Playbook
+  hosts: aws_region_ap_south_1
+  tasks:
+
+    - name: Run Shell Command
+      debug:
+        msg: "Hello World"
