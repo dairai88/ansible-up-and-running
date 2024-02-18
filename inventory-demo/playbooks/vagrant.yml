@@ -1,0 +1,36 @@
+---
+
+- name: Provision a Vagrant machine
+  hosts: localhost
+  vars:
+    box: "bento/fedora-latest"
+  tasks:
+    # - name: Delete Vagrantfile
+    #   file:
+    #     path: Vagrantfile
+    #     state: absent
+
+    - name: Create a Vagrantfile
+      command: "vagrant init {{ box }}"
+      args:
+        creates: Vagrantfile
+
+    - name: Bring up the vagrant machine
+      command: vagrant up
+      args:
+        creates: .vagrant/machines/default/vmware_desktop/box_meta
+
+    - name: Add the vagrant machine to the inventory
+      add_host:
+        name: default
+        ansible_host: 127.0.0.1
+        ansible_port: 2202
+        ansible_user: vagrant
+        ansible_private_key_file: .vagrant/machines/default/vmware_desktop/private_key
+
+- name: Do something
+  hosts: default
+  tasks:
+    - name: Ping
+      ping:
+...
