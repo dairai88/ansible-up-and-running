@@ -1,0 +1,35 @@
+---
+
+- name: Group hosts by distribution
+  hosts: vagrant
+  gather_facts: true
+  tasks:
+    - name: Show distribution
+      debug:
+        var: ansible_distribution
+
+    - name: Create groups based on distribution
+      group_by:
+        key: "{{ ansible_distribution }}"
+
+- name: Do something to Ubuntu hosts
+  hosts: Ubuntu
+  become: true
+  tasks:
+    - name: Install jdk and jre
+      apt:
+        update_cache: true
+        name:
+          - openjdk-11-jdk-headless
+          - openjdk-11-jre-headless
+
+- name: Do something else to Fedora hosts
+  hosts: Fedora
+  become: true
+  tasks:
+    - name: Install jdk
+      yum:
+        update_cache: true
+        name:
+          - java-11-openjdk-headless
+          - java-11-openjdk-devel
