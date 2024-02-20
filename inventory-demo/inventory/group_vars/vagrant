@@ -1,2 +1,4 @@
 ---
 myvar: myval
+server_name: example.com
+domain_name: blog
