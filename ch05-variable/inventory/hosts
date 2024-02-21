@@ -1,0 +1,8 @@
+[vagrant]
+ubuntu ansible_host=192.168.49.146 ansible_private_key_file=.vagrant/machines/ubuntu/vmware_desktop/private_key
+fedora ansible_host=192.168.49.147 ansible_private_key_file=.vagrant/machines/fedora/vmware_desktop/private_key
+debian ansible_host=192.168.49.148 ansible_private_key_file=.vagrant/machines/debian/vmware_desktop/private_key
+
+[vagrant:vars]
+ansible_user=vagrant
+ansible_python_interpreter=/usr/bin/python3
