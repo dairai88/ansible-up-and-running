@@ -1,0 +1,13 @@
+---
+- name: Show return value
+  hosts: vagrant
+  gather_facts: true
+  tasks:
+    - name: Capture out of whoami command
+      command: whoami
+      register: login
+      changed_when: false
+
+    - name: Show login value
+      debug:
+        var: login
