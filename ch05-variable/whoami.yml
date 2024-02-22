@@ -11,3 +11,20 @@
     - name: Show login value
       debug:
         var: login
+
+- name: Show return value of command module
+  hosts: fedora
+  gather_facts: false
+  tasks:
+    - name: Capture output of id command
+      command: id -un
+      register: login
+      changed_when: false
+
+    - name: Show login
+      debug:
+        var: login
+
+    - name: Show login stdout
+      debug:
+        msg: "Logged in as user {{ login.stdout }}"
