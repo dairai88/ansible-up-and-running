@@ -13,8 +13,11 @@
         var: login
 
 - name: Show return value of command module
-  hosts: fedora
+  hosts:
+    - fedora
+    - aliyun
   gather_facts: false
+  become: true
   tasks:
     - name: Capture output of id command
       command: id -un

@@ -3,6 +3,12 @@ ubuntu ansible_host=192.168.49.146 ansible_private_key_file=.vagrant/machines/ub
 fedora ansible_host=192.168.49.147 ansible_private_key_file=.vagrant/machines/fedora/vmware_desktop/private_key
 debian ansible_host=192.168.49.149 ansible_private_key_file=.vagrant/machines/debian/vmware_desktop/private_key
 
+[aliyun]
+aliyun ansible_host=39.99.132.13
+
 [vagrant:vars]
 ansible_user=vagrant
 ansible_python_interpreter=/usr/bin/python3
+
+[aliyun:vars]
+ansible_user=ecs-user
