@@ -13,4 +13,4 @@
 
     - name: Display result.stat detail
       debug:
-        var: result['stat'][stat_key]
+        var: result.stat
