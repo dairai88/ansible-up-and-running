@@ -1,0 +1,39 @@
+---
+- name: Configure webserver with nginx
+  hosts: aliyun
+  become: true
+
+  tasks:
+    - name: Install nginx
+      package:
+        name: nginx
+        update_cache: true
+      ignore_errors: true
+      register: ignore_install_errors
+
+    - name: Start nginx
+      systemd:
+        name: nginx
+        state: started
+        enabled: true
+        daemon_reload: true
+      ignore_errors: true
+      register: ignore_start_errors
+
+    - name: Gather server facts
+      service_facts:
+      ignore_errors: true
+      register: ignore_gather_errors
+
+    - name: Show state
+      debug:
+        var: ansible_facts.services['nginx.service']['state']
+
+    - name: Set nginx_state
+      when: ansible_facts.services['nginx.service']['state'] is defined
+      set_fact:
+        nginx_state: "{{ ansible_facts.services['nginx.service']['state'] }}"
+
+    - name: Show nginx state
+      debug:
+        var: nginx_state
