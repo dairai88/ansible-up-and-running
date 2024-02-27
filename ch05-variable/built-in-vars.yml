@@ -1,0 +1,39 @@
+---
+- name: Show built-in vars
+  hosts: aliyun
+  tasks:
+    - name: Show host variable
+      debug:
+        var: hostvars['aliyun'].ansible_eth0.ipv4.address
+
+    - name: Show inventory hostname
+      debug:
+        var: inventory_hostname
+
+    - name: Show inventory hostname short
+      debug:
+        var: inventory_hostname_short
+
+    - name: Show group names
+      debug:
+        var: group_names
+
+    - name: Show groups
+      debug:
+        var: groups
+
+    - name: Show if ansible check mode
+      debug:
+        var: ansible_check_mode
+
+    - name: Show ansible_play_batch
+      debug:
+        var: ansible_play_batch
+
+    - name: Show ansible_play_hosts
+      debug:
+        var: ansible_play_hosts
+
+    - name: Show ansible version
+      debug:
+        var: ansible_version
