@@ -1,0 +1,9 @@
+---
+- name: Show any variable during debugging.
+  hosts: aliyun
+  gather_facts: true
+  tasks:
+    - name: Output variable
+      debug:
+        var: "{{ variable }}"
+...
