@@ -1,0 +1,82 @@
+---
+- name: Deploy mezzanine
+  hosts: aliyun
+
+  vars:
+    user: "{{ ansible_user }}"
+    proj_app: 'mezzanine_example'
+    proj_name: "{{ proj_app }}"
+    venv_home: "{{ ansible_env.HOME }}/.virtualenvs"
+    venv_path: "{{ venv_home }}/{{ proj_name }}"
+    proj_path: "{{ ansible_env.HOME }}/mezzanine/{{ proj_name }}"
+    settings_path: "{{ proj_path }}/{{ proj_name }}"
+    reqs_path: '~/requirements.txt'
+    repo_url: git@github.com:ansiblebook/mezzanine_example.git
+
+    photo_app_url: git@github.com:dairai88/photo-app-service.git
+    photo_repo_url: "{{ ansible_env.HOME }}/photo-app-service"
+
+  tasks:
+    - name: Show variables
+      debug:
+        msg: "{{ settings_path }}"
+
+    - name: Install apt packages
+      become: true
+      apt:
+        update_cache: true
+        cache_valid_time: 3600
+        package:
+          - acl
+          - git
+          - libjpeg-dev
+          - libpq-dev
+          - memcached
+          - nginx
+          - postgresql
+          - python3-dev
+          - python3-pip
+          - python3-venv
+          - python3-psycopg2
+          - supervisor
+
+    - name: Create project path
+      file:
+        path: "{{ proj_path }}"
+        state: directory
+        mode: '755'
+
+    - name: Create a logs directory
+      file:
+        path: "{{ ansible_env.HOME }}/logs"
+        state: directory
+        mode: '755'
+
+    - name: Check out the Git repository
+      git:
+        repo: "{{ repo_url }}"
+        dest: "{{ proj_path }}"
+        version: master
+        accept_hostkey: true
+        update: false
+
+    - name: Create python3 virtualenv
+      pip:
+        name:
+          - pip
+          - wheel
+          - setuptools
+        state: latest
+        virtualenv: "{{ venv_path }}"
+        virtualenv_command: /usr/bin/python3 -m venv
+
+    - name: Copy requirements.txt to home directory
+      copy:
+        src: requirements.txt
+        dest: "{{ reqs_path }}"
+        mode: '0644'
+
+    - name: Install packages listed in requirements.txt
+      pip:
+        virtualenv: "{{ venv_path }}"
+        requirements: "{{ reqs_path }}"
