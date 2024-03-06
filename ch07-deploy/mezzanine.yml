@@ -1,6 +1,8 @@
 ---
 - name: Deploy mezzanine
-  hosts: aliyun
+  hosts:
+    - aliyun
+    - vagrant
 
   vars:
     user: "{{ ansible_user }}"

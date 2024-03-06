@@ -1,0 +1,25 @@
+---
+- name: Showcase uri module
+  hosts: localhost
+
+  tasks:
+    - name: Create user entity
+      uri:
+        url: 'http://127.0.0.1:8080/users'
+        method: POST
+        body_format: json
+        headers:
+          Accept: 'application/json'
+        body:
+          firstName: Dalei
+          lastName: Sun
+          email: sundalei@example.com
+          password: oarnud9I*test
+        status_code:
+          - 200
+        return_content: true
+      register: result
+
+    - name: Display result
+      debug:
+        msg: "{{ result }}"
