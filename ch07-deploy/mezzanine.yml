@@ -12,25 +12,24 @@
     proj_path: "{{ ansible_env.HOME }}/mezzanine/{{ proj_name }}"
     settings_path: "{{ proj_path }}/{{ proj_name }}"
     reqs_path: '~/requirements.txt'
-    live_hostname: 192.168.2.128.nip.io
+    live_hostname: 192.168.2.135.nip.io
     domains:
-      - 192.168.2.128.nip.io
-      - www.192.168.2.128.nip.io
+      - 192.168.2.135.nip.io
+      - www.192.168.2.135.nip.io
     repo_url: git@github.com:ansiblebook/mezzanine_example.git
     locale: en_US.UTF-8
     conf_path: /etc/nginx/conf
     tls_enabled: true
     database_name: "{{ proj_name }}"
     database_user: "{{ proj_name }}"
+    database_host: localhost
+    database_port: 5432
     gunicorn_procname: gunicorn_mezzanine
 
   vars_files:
     - secrets.yml
 
   tasks:
-    - name: Show variables
-      debug:
-        msg: "{{ settings_path }}"
 
     - name: Install apt packages
       become: true
@@ -69,7 +68,6 @@
         dest: "{{ proj_path }}"
         version: master
         accept_hostkey: true
-        update: false
 
     - name: Create python3 virtualenv
       pip:
@@ -212,6 +210,12 @@
         PROJECT_DIR: "{{ proj_path }}"
         PROJECT_APP: "{{ proj_app }}"
         ADMIN_PASSWORD: "{{ admin_pass }}"
+
+    - name: Restart supervisor in case any error
+      become: true
+      community.general.supervisorctl:
+        name: "{{ gunicorn_procname }}"
+        state: restarted
 
   handlers:
     - name: Restart supervisor
