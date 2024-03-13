@@ -211,6 +211,13 @@
         PROJECT_APP: "{{ proj_app }}"
         ADMIN_PASSWORD: "{{ admin_pass }}"
 
+    - name: Echo cron job
+      cron:
+        name: 'echo hello'
+        minute: '*/5'
+        user: "{{ user }}"
+        job: "echo 'hello world' >> ~/greeting.txt"
+
     - name: Restart supervisor in case any error
       become: true
       community.general.supervisorctl:
