@@ -1,0 +1,12 @@
+---
+- name: Showcase uri module
+  hosts: web
+  vars:
+    the_pub_key: ~/.ssh/id_rsa.pub
+  tasks:
+    - name: Install authorized_keys taken from file
+      authorized_key:
+        user: "{{ ansible_user }}"
+        state: present
+        key: "{{ lookup('file', the_pub_key)  }}"
+        key_options: 'no-port-forwarding,from="93.184.216.36"'
