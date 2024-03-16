@@ -1,0 +1,13 @@
+[all]
+web ansible_host=192.168.207.140
+db ansible_host=192.168.207.150
+
+[cloud]
+aliyun ansible_host=39.99.132.13
+
+[all:vars]
+ansible_user=vagrant
+ansible_private_key_file=~/.vagrant.d/insecure_private_key
+
+[cloud:vars]
+ansible_user=ecs-user

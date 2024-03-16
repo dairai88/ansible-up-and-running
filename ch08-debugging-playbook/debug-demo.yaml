@@ -1,0 +1,15 @@
+---
+- name: Debug usage
+  hosts: aliyun
+  tasks:
+    - name: Show debug variable
+      debug:
+        var: myvariable
+
+    - name: Show debug message
+      debug:
+        msg: "The value of myvariable is {{ myvariable }}"
+
+    - name: Show values of all the variables associated with the current host
+      debug:
+        var: hostvars[inventory_hostname]['ansible_default_ipv4']
