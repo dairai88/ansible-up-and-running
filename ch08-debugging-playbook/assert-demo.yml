@@ -1,0 +1,25 @@
+---
+- name: Debug usage
+  hosts: aliyun
+  vars:
+    ports:
+      - 3000
+      - 4000
+  tasks:
+    - name: Assert ports length is 2
+      ansible.builtin.assert:
+        that:
+          - ports|length == 2
+
+    - name: Stat /boot/grub
+      stat:
+        path: /boot/grub
+      register: st
+
+    - name: Display st
+      debug:
+        var: st
+
+    - name: Assert that /boot/grub is a directory
+      assert:
+        that: st.stat.isdir
