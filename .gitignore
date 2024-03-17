@@ -3,3 +3,4 @@
 aws_credential.txt
 .DS_Store
 .idea/
+venv/

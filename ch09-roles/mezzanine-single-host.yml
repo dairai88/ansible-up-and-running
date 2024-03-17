@@ -1,0 +1,4 @@
+---
+- name: Deploy mezzanine on vagrant
+  hosts:
+    - web
