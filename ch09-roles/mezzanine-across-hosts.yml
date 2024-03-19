@@ -1,0 +1,35 @@
+---
+
+- name: Deploy postgres on db
+  hosts: db
+
+  vars_files:
+    - secrets.yml
+
+  roles:
+    - role: database
+      database_name: "{{ mezzanine_proj_name }}"
+      database_user: "{{ mezzanine_proj_name }}"
+
+- name: Deploy mezzanine on web
+  hosts: web
+
+  vars_files:
+    - secrets.yml
+
+  pre_tasks:
+    - name: Update the apt cache
+      become: true
+      apt:
+        update_cache: true
+
+  roles:
+    - role: mezzanine
+      mezzanine_database_host: "{{ hostvars.db.ansible_eth0.ipv4.address }}"
+    - role: nginx
+
+  post_tasks:
+    - name: Notify that the servers have been updated
+      delegate_to: localhost
+      debug:
+        msg: "web server configured."

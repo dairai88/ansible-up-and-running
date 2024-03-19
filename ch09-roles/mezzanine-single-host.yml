@@ -2,3 +2,14 @@
 - name: Deploy mezzanine on vagrant
   hosts:
     - web
+
+  vars_files:
+    - secrets.yml
+
+  roles:
+    - role: database
+      database_name: "{{ mezzanine_proj_name }}"
+      database_user: "{{ mezzanine_proj_name }}"
+    - role: mezzanine
+      database_host: '127.0.0.1'
+    - role: nginx

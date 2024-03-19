@@ -5,6 +5,12 @@ Vagrant.configure("2") do |config|
     # Use the default insecure key for these machine
     config.ssh.insert_key = false
 
+    # Use ssh-agent for cloning from Github.com
+    config.ssh.forward_agent = true
+
+    config.vm.define 'db' do |db|
+    end
+
     config.vm.define 'web' do |web|
     end
 
