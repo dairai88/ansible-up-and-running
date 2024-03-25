@@ -1,0 +1,6 @@
+---
+postgres_packages:
+  - acl
+  - libpq-dev
+  - postgresql
+  - python3-psycopg2

@@ -8,8 +8,13 @@
 
   roles:
     - role: database
+      tags: database
       database_name: "{{ mezzanine_proj_name }}"
       database_user: "{{ mezzanine_proj_name }}"
+
     - role: mezzanine
-      database_host: '127.0.0.1'
+      tags: mezzanine
+      mezzanine_database_host: '127.0.0.1'
+
     - role: nginx
+      tags: nginx

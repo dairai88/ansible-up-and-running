@@ -8,6 +8,7 @@
 
   roles:
     - role: database
+      tags: database
       database_name: "{{ mezzanine_proj_name }}"
       database_user: "{{ mezzanine_proj_name }}"
 
@@ -25,8 +26,10 @@
 
   roles:
     - role: mezzanine
+      tags: mezzanine
       mezzanine_database_host: "{{ hostvars.db.ansible_eth0.ipv4.address }}"
     - role: nginx
+      tags: nginx
 
   post_tasks:
     - name: Notify that the servers have been updated
