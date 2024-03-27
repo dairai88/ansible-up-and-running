@@ -1,0 +1,23 @@
+SECRET_KEY = "{{ secret_key }}"
+NEVERCACHE_KEY = "{{ nevercache_key }}"
+ALLOWED_HOSTS = [{% for domain in domains %}"{{ domain }}",{% endfor %}]
+
+DATABASES = {
+    "default": {
+        "ENGINE": "django.db.backends.postgresql_psycopg2",
+        "NAME": "{{ mezzanine_proj_name }}",
+        "USER": "{{ mezzanine_proj_name }}",
+        "PASSWORD": "{{ db_pass }}",
+        "HOST": "{{ mezzanine_database_host }}",
+        "PORT": "",
+    }
+}
+
+CACHE_MIDDLEWARE_KEY_PREFIX = "{{ mezzanine_proj_name }}"
+CACHES = {
+    "default": {
+        "BACKEND": "django.core.cache.backends.memcached.MemcachedCache",
+        "LOCATION": "127.0.0.1:11211",
+    }
+}
+SESSION_ENGINE = "django.contrib.sessions.backends.cache"

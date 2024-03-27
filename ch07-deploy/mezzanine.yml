@@ -12,10 +12,10 @@
     proj_path: "{{ ansible_env.HOME }}/mezzanine/{{ proj_name }}"
     settings_path: "{{ proj_path }}/{{ proj_name }}"
     reqs_path: '~/requirements.txt'
-    live_hostname: 192.168.207.128.nip.io
+    live_hostname: 192.168.207.135.nip.io
     domains:
-      - 192.168.207.128.nip.io
-      - www.192.168.207.128.nip.io
+      - 192.168.207.135.nip.io
+      - www.192.168.207.135.nip.io
     repo_url: git@github.com:ansiblebook/mezzanine_example.git
     locale: en_US.UTF-8
     conf_path: /etc/nginx/conf
