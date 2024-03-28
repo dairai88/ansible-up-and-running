@@ -7,6 +7,8 @@ Vagrant.configure("2") do |config|
 
     # Use ssh-agent for cloning from Github.com
     config.ssh.forward_agent = true
+    # disable guest additions
+    config.vm.synced_folder '.', '/vagrant', disabled: true
 
     config.vm.define 'db' do |db|
     end
