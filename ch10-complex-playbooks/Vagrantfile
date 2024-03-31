@@ -1,0 +1,22 @@
+Vagrant.configure("2") do |config|
+    
+    # Forward ssh-agent for cloning from github
+    config.ssh.forward_agent = true
+
+    # Disable guest additions
+    config.vm.synced_folder '.', '/vagrant', disabled: true
+
+    config.vm.define "dev" do |web|
+        web.vm.box = "bento/ubuntu-20.04-arm64"
+        web.vm.hostname = "dev"
+        web.vm.network "forwarded_port", guest: 80, host: 8000
+        web.vm.network "forwarded_port", guest: 443, host: 8443
+    end
+
+    config.vm.define "prod" do |web|
+        web.vm.box = "bento/ubuntu-20.04-arm64"
+        web.vm.hostname = "prod"
+        web.vm.network "forwarded_port", guest: 80, host: 9000
+        web.vm.network "forwarded_port", guest: 443, host: 9443
+    end
+end
