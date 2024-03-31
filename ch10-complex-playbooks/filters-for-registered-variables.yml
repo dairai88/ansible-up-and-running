@@ -1,0 +1,18 @@
+---
+
+- name: Show usage for filters for registered variables
+  hosts: localhost
+  tasks:
+    - name: Run myprog
+      command: ls -la
+      register: result
+      ignore_errors: true
+
+    - name: Show result
+      debug:
+        var: result
+
+    - name: Stop running the playbook if myprog failed
+      debug:
+        msg: "Stop running the playbook if myprog failed"
+      failed_when: result | failed
