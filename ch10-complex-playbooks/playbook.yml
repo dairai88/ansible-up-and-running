@@ -1,0 +1,35 @@
+---
+
+- name: Chapter 10 examples
+  hosts: localhost
+  connection: local
+
+  tasks:
+    - name: Test of filter plugin
+      template:
+        src: example-10-10.j2
+        dest: ./example.txt
+        mode: '0644'
+
+- name: Chapter 10 examples
+  hosts:
+    - dev
+    - prod
+
+  tasks:
+    - name: Add my public key for SSH
+      authorized_key:
+        user: vagrant
+        key: "{{ lookup('file', item) }}"
+      with_first_found:
+        - ~/.ssh/id_ed25519.pub
+        - ~/.ssh/id_rsa.pub
+        - ~/.ssh/id_ecdsa.pub
+
+    - name: Copy authorized_keys template
+      template:
+        src: authorized_keys.j2
+        dest: /home/vagrant/.ssh/authorized_keys_demo
+        owner: vagrant
+        group: vagrant
+        mode: '0600'
