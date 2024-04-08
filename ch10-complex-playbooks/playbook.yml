@@ -92,3 +92,32 @@
     - name: Display maven download result
       debug:
         var: maven_download
+
+    - name: Iterate with lookup
+      debug:
+        msg: "KPI: {{ item.kpi }} prio: {{ i + 1 }} goto: {{ item.dept }}"
+      loop:
+        - kpi: availability
+          dept: operations
+        - kpi: performance
+          dept: development
+        - kpi: security
+          dept: security
+      loop_control:
+        index_var: i
+        pause: 3
+
+- name: Chapter 10 loop examples
+  hosts:
+    - dev
+    - prod
+  tasks:
+    - name: Install package
+      become: true
+      vars:
+        list_of_packages:
+          - git
+          - wget
+      package:
+        name: "{{ list_of_packages }}"
+        state: latest
