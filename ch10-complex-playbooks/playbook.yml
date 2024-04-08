@@ -73,3 +73,22 @@
     - name: Look up values in Redis
       debug:
         msg: "{{ lookup('redis', 'weather', 'temp') }}"
+
+    - name: Unarchive maven
+      vars:
+        maven_url: "{{ ansible_env['HOME'] }}/apache-maven-3.9.6-bin.zip"
+        maven_location: "{{ ansible_env['HOME'] }}/maven"
+      unarchive:
+        src: "{{ maven_url }}"
+        dest: "{{ maven_location }}"
+        remote_src: true
+        mode: '0755'
+      register: maven_download
+      until: maven_download.failed == false
+      retries: 5
+      delay: 3
+      ignore_errors: true
+
+    - name: Display maven download result
+      debug:
+        var: maven_download
