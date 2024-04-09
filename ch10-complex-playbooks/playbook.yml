@@ -127,3 +127,12 @@
       package:
         name: "{{ list_of_packages }}"
         state: latest
+
+    - name: Add public keys to account
+      become: true
+      authorized_key:
+        user: deploy
+        key: "{{ lookup('file', item) }}"
+      with_fileglob:
+        - ~/.ssh/id_rsa.pub
+        - ~/.ssh/id_ed25519.pub
