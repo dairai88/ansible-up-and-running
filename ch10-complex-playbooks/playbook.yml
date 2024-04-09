@@ -107,6 +107,12 @@
         index_var: i
         pause: 3
 
+    - name: Iterate over lines in a file
+      say:
+        msg: "{{ item }}"
+      with_lines:
+        - cat files/turing.txt
+
 - name: Chapter 10 loop examples
   hosts:
     - dev
