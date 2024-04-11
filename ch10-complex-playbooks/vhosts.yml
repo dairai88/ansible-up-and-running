@@ -1,0 +1,16 @@
+- name: Create nginx directories
+  become: true
+  file:
+    path: "/var/www/html/{{ vhost.domain }}/{{ item }}"
+    state: directory
+  with_items:
+    - logs
+    - public_http
+    - public_https
+    - includes
+
+- name: Create nginx vhost config
+  become: true
+  template:
+    src: "{{ vhost.domain }}.conf.j2"
+    dest: /etc/nginx/conf.d/{{ vhost.domain }}.conf

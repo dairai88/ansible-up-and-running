@@ -108,7 +108,7 @@
         pause: 3
 
     - name: Iterate over lines in a file
-      say:
+      debug:
         msg: "{{ item }}"
       with_lines:
         - cat files/turing.txt
@@ -136,3 +136,34 @@
       with_fileglob:
         - ~/.ssh/id_rsa.pub
         - ~/.ssh/id_ed25519.pub
+
+    - name: Iterate over ansible_eth0
+      debug:
+        msg: "{{ item.key }}={{ item.value }}"
+      with_dict: "{{ ansible_eth0.ipv4 }}"
+
+    - name: Add users
+      become: true
+      user:
+        name: "{{ user.name }}"
+      with_items:
+        - { name: gil }
+        - { name: sarina }
+        - { name: leanne }
+      loop_control:
+        loop_var: user
+
+    - name: Install nginx
+      become: true
+      package:
+        name: nginx
+        update_cache: true
+
+    - name: Run a set of tasks in one loop
+      include_tasks: vhosts.yml
+      with_items:
+        - { domain: www1.example.com }
+        - { domain: www2.example.com }
+        - { domain: www3.example.com }
+      loop_control:
+        loop_var: vhost
