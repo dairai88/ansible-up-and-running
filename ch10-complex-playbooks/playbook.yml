@@ -162,8 +162,9 @@
     - name: Run a set of tasks in one loop
       include_tasks: vhosts.yml
       with_items:
-        - { domain: www1.example.com }
-        - { domain: www2.example.com }
-        - { domain: www3.example.com }
+        - { domain: www1.example.com, tls_enabled: true }
+        - { domain: www2.example.com, tls_enabled: false }
+        - { domain: www3.example.com, tls_enabled: false, aliases: [ edge2.www.example.com, eu.www.example.com ] }
       loop_control:
         loop_var: vhost
+        label: "for domain {{ vhost.domain }}"
