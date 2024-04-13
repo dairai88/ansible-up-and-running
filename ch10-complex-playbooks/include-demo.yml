@@ -1,0 +1,14 @@
+---
+
+- name: Nginx configuration
+  become: true
+  hosts:
+    - dev
+    - staging
+    - prod
+
+  tasks:
+    - name: Nginx tasks
+      include_tasks: nginx_include.yml
+      when: ansible_os_family == 'RedHat'
+      tags: nginx

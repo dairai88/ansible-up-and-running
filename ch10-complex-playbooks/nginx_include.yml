@@ -1,0 +1,11 @@
+---
+
+- name: Install nginx
+  package:
+    name: nginx
+
+- name: Ensure nginx is running
+  service:
+    name: nginx
+    state: started
+    enabled: true
