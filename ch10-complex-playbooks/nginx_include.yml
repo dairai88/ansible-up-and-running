@@ -4,6 +4,12 @@
   package:
     name: nginx
 
+- name: Configure nginx
+  copy:
+    src: nginx.conf
+    dest: /etc/nginx/nginx.conf
+    mode: '0755'
+
 - name: Ensure nginx is running
   service:
     name: nginx

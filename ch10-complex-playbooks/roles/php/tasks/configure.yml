@@ -1,0 +1,5 @@
+---
+
+- name: Configure php
+  debug:
+    msg: Configure php
