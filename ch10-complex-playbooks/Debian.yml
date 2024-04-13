@@ -1,0 +1,3 @@
+- name: Execute on debian
+  debug:
+    msg: Execute on debian

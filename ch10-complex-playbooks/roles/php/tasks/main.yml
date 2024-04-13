@@ -1,0 +1,6 @@
+---
+
+- name: Install php
+  yum:
+    state: latest
+    pkg: php

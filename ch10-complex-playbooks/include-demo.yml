@@ -12,3 +12,25 @@
       include_tasks: nginx_include.yml
       when: ansible_os_family == 'RedHat'
       tags: nginx
+
+    - name: Play platform specific actions
+      include_tasks: "{{ ansible_os_family }}.yml"
+
+- name: Configure staging server
+  hosts: staging
+  become: true
+  tasks:
+
+    - name: Install nginx
+      yum:
+        pkg: nginx
+
+    - name: Install php
+      include_role:
+        name: php
+
+    - name: Configure nginx
+      template:
+        src: nginx.conf.j2
+        dest: /etc/nginx/nginx.conf
+        mode: '0755'

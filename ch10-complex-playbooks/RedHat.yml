@@ -1,0 +1,3 @@
+- name: Execute on redhat
+  debug:
+    msg: Execute on redhat
