@@ -1,0 +1,29 @@
+---
+
+- name: Show block with error handling
+  hosts: staging
+
+  tasks:
+
+    - name: Block with error handling
+      block:
+        - name: Prompt that an error will happen
+          debug:
+            msg: "You will see a failed tasks right after this"
+
+        - name: Dummy command and Returns 1
+          command: /usr/bin/false
+          changed_when: false
+
+        - name: Message which can not be reached
+          debug:
+            msg: "You never see this message"
+
+      rescue:
+        - name: Rescue process
+          debug:
+            msg: "You see this message in case of failure in the block"
+      always:
+        - name: Block that blocked anyway
+          debug:
+            msg: "This will be always executed"
