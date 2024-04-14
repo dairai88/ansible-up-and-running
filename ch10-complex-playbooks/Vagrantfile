@@ -26,4 +26,10 @@ Vagrant.configure("2") do |config|
         web.vm.network "forwarded_port", guest: 80, host: 6000
         web.vm.network "forwarded_port", guest: 443, host: 6443
     end
+
+    config.vm.define "prerelease" do |web|
+        web.vm.box = "bento/centos-stream-9"
+        web.vm.hostname = "prerelease"
+        web.vm.network "forwarded_port", guest: 80, host: 8090
+    end
 end

@@ -41,3 +41,21 @@
       include_role:
         name: php
         tasks_from: configure
+
+- name: Show block demo
+  hosts: dev,prerelease
+  tasks:
+    - name: Block demo
+      become: true
+      when: ansible_os_family == 'RedHat'
+      block:
+        - name: Install nginx
+          package:
+            name: nginx
+            state: latest
+
+        - name: Ensure nginx is running
+          service:
+            name: nginx
+            state: started
+            enabled: true
