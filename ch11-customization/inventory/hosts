@@ -5,3 +5,4 @@ web
 ansible_host=
 ansible_private_key_file=
 ansible_user=vagrant
+ansible_port=
