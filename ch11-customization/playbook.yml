@@ -1,0 +1,6 @@
+---
+
+- name: Chapter 11 playbook
+  hosts: web
+
+  tasks:
