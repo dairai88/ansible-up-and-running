@@ -14,8 +14,8 @@
     reqs_path: '~/requirements.txt'
     live_hostname: 192.168.111.130.nip.io
     domains:
-      - 192.168.111.130.nip.io
-      - www.192.168.111.130.nip.io
+      - "{{ ansible_eth0.ipv4.address }}.nip.io"
+      - "www.{{ ansible_eth0.ipv4.address }}.nip.io"
     repo_url: git@github.com:ansiblebook/mezzanine_example.git
     locale: en_US.UTF-8
     conf_path: /etc/nginx/conf

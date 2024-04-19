@@ -5,7 +5,7 @@ web ansible_host=39.99.132.13
 linode_web ansible_host=172.235.5.150
 
 [vagrant]
-testserver ansible_port=2201
+testserver ansible_port=
 
 [aliyun:vars]
 ansible_user=ecs-user
