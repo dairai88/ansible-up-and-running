@@ -1,19 +1,7 @@
-[aliyun]
-web ansible_host=39.99.132.13
-
-[linode]
-linode_web ansible_host=172.235.5.150
-
 [vagrant]
 testserver ansible_port=
-
-[aliyun:vars]
-ansible_user=ecs-user
-
-[linode:vars]
-ansible_user=root
 
 [vagrant:vars]
 ansible_user=vagrant
 ansible_host=127.0.0.1
-ansible_ssh_private_key_file=/Users/daleisun/study/ansible-up-and-running/ch07-deploy/.vagrant/machines/ubuntu/vmware_desktop/private_key
+ansible_ssh_private_key_file=.vagrant/machines/ubuntu/vmware_desktop/private_key

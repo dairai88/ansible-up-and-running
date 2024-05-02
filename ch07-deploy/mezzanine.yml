@@ -230,6 +230,10 @@
         name: "{{ gunicorn_procname }}"
         state: restarted
 
+    - name: Show deployment success info
+      debug:
+        msg: "deploy success. Visit {{ ansible_eth0.ipv4.address }}.nip.io to open website."
+
   handlers:
     - name: Restart supervisor
       become: true
