@@ -19,3 +19,12 @@
     - name: Show download result
       debug:
         var: result
+
+- name: Chapter 11 playbook section2
+  hosts: web,db1
+  strategy: linear
+  tasks:
+    - name: Display welcome message
+      run_once: true
+      debug:
+        msg: "Welcome"

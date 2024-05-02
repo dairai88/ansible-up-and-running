@@ -1,8 +1,7 @@
 [vagrant]
-web
+web ansible_port= ansible_private_key_file=.vagrant/machines/web/vmware_desktop/private_key
+db1 ansible_port= ansible_private_key_file=.vagrant/machines/db1/vmware_desktop/private_key
 
 [vagrant:vars]
-ansible_host=
-ansible_private_key_file=
+ansible_host=127.0.0.1
 ansible_user=vagrant
-ansible_port=
