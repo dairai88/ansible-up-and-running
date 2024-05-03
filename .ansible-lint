@@ -1,3 +1,3 @@
 skip_list:
   - fqcn-builtins
-  - '403' # https://github.com/ansible/ansible-lint/issues/479
+  - run-once
