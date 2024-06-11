@@ -1,0 +1,12 @@
+---
+- name: Prepare
+  hosts: localhost
+  connection: local
+  tasks:
+    - name: Create a Multipass VM
+      theko2fi.multipass.multipass_vm:
+        name: web
+        cpus: 2
+        memory: 2G
+        disk: 8G
+        state: started
