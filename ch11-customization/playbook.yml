@@ -8,8 +8,8 @@
       debug:
         msg: "Hello from {{ ansible_facts['hostname'] }}"
 
-- name: Chapter 11 playbook
-  hosts: web
+- name: Show usage of delegate_to option
+  hosts: multipass
 
   tasks:
 
@@ -27,12 +27,3 @@
     - name: Show download result
       debug:
         var: result
-
-- name: Chapter 11 playbook section2
-  hosts: web,db1
-  strategy: linear
-  tasks:
-    - name: Display welcome message
-      run_once: true
-      debug:
-        msg: "Welcome"

@@ -7,9 +7,7 @@ ansible_host=127.0.0.1
 ansible_user=vagrant
 
 [multipass]
-perconamongo1
-perconamongo2
-perconamongo3
+perconamongo[1:3]
 
 [multipass:vars]
 ansible_connection=theko2fi.multipass.multipass
