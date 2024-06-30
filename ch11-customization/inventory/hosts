@@ -5,3 +5,12 @@ db1 ansible_port= ansible_private_key_file=.vagrant/machines/db1/vmware_desktop/
 [vagrant:vars]
 ansible_host=127.0.0.1
 ansible_user=vagrant
+
+[multipass]
+perconamongo1
+perconamongo2
+perconamongo3
+
+[multipass:vars]
+ansible_connection=theko2fi.multipass.multipass
+ansible_python_interpreter=/usr/bin/python3

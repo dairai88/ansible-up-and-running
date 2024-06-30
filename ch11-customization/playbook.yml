@@ -1,5 +1,13 @@
 ---
 
+- name: Show usage of limit option
+  hosts: multipass
+
+  tasks:
+    - name: Greeting from targets
+      debug:
+        msg: "Hello from {{ ansible_facts['hostname'] }}"
+
 - name: Chapter 11 playbook
   hosts: web
 
