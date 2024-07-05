@@ -1,7 +1,7 @@
 ---
 - name: Deploy mezzanine
   hosts:
-    - vagrant
+    - multipass
 
   vars:
     user: "{{ ansible_user }}"
@@ -12,11 +12,11 @@
     proj_path: "{{ ansible_env.HOME }}/mezzanine/{{ proj_name }}"
     settings_path: "{{ proj_path }}/{{ proj_name }}"
     reqs_path: '~/requirements.txt'
-    live_hostname: 192.168.111.130.nip.io
+    live_hostname: "{{ ansible_enp0s1.ipv4.address }}"
     domains:
-      - "{{ ansible_eth0.ipv4.address }}.nip.io"
-      - "www.{{ ansible_eth0.ipv4.address }}.nip.io"
-    repo_url: git@github.com:ansiblebook/mezzanine_example.git
+      - "{{ ansible_enp0s1.ipv4.address }}.nip.io"
+      - "www.{{ ansible_enp0s1.ipv4.address }}.nip.io"
+    repo_url: https://github.com/ansiblebook/mezzanine_example.git
     locale: en_US.UTF-8
     conf_path: /etc/nginx/conf
     tls_enabled: true
@@ -63,6 +63,8 @@
         mode: '0755'
 
     - name: Check out the Git repository
+      environment:
+        http_proxy: "http://192.168.1.25:1082"
       git:
         repo: "{{ repo_url }}"
         dest: "{{ proj_path }}"
@@ -232,7 +234,7 @@
 
     - name: Show deployment success info
       debug:
-        msg: "deploy success. Visit {{ ansible_eth0.ipv4.address }}.nip.io to open website."
+        msg: "deploy success. Visit {{ ansible_enp0s1.ipv4.address }}.nip.io to open website."
 
   handlers:
     - name: Restart supervisor

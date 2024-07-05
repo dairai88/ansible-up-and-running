@@ -1,7 +1,7 @@
 ---
 
 - name: Show usage of limit option
-  hosts: multipass
+  hosts: perconamongo1
 
   tasks:
     - name: Greeting from targets
@@ -9,7 +9,7 @@
         msg: "Hello from {{ ansible_facts['hostname'] }}"
 
 - name: Show usage of delegate_to option
-  hosts: multipass
+  hosts: perconamongo1
 
   tasks:
 
@@ -27,3 +27,15 @@
     - name: Show download result
       debug:
         var: result
+
+- name: Manually gathering ansible_facts
+  hosts: perconamongo1
+  gather_facts: false
+  become: false
+  tasks:
+    - name: Gather facts
+      setup:
+
+    - name: Retrieve ip address of network interface enp0s1
+      debug:
+        var: ansible_enp0s1.ipv4.address
