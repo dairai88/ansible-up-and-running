@@ -49,3 +49,29 @@
     - name: Greeting from targets
       ansible.builtin.debug:
         msg: "Hello from {{ ansible_facts['hostname'] }}"
+
+- name: Generate a keyfile
+  hosts: multipass
+  tasks:
+    - name: Check if rskeyfile exists
+      delegate_to: localhost
+      ansible.builtin.stat:
+        path: ./rskeyfile
+      register: key_file
+      run_once: true
+
+    - name: Generate key file, run only once on localhost
+      delegate_to: localhost
+      ansible.builtin.shell: openssl rand -base64 756 > rskeyfile
+      run_once: true
+      when: not key_file.stat.exists
+      register: created_output
+      changed_when: created_output.rc != 0
+
+    - name: Change keyfile ownership
+      delegate_to: localhost
+      ansible.builtin.command: chmod 400 ./rskeyfile
+      run_once: true
+      register: ownership_output
+      changed_when: ownership_output.rc != 0
+      when: not key_file.stat.exists
