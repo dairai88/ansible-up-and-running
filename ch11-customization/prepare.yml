@@ -1,0 +1,16 @@
+---
+- name: Launch 3 hosts
+  hosts: localhost
+  connection: local
+  tasks:
+    - name: Create 3 multipass VMs
+      theko2fi.multipass.multipass_vm:
+        name: "{{ item }}"
+        cpus: 2
+        memory: 2G
+        disk: 8G
+        state: started
+      with_items:
+        - node1
+        - node2
+        - node3

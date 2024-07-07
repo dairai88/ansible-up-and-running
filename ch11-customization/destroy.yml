@@ -1,0 +1,14 @@
+---
+- name: Destroy
+  hosts: localhost
+  connection: local
+  tasks:
+    - name: Delete and purge VMs
+      theko2fi.multipass.multipass_vm:
+        name: "{{ item }}"
+        state: absent
+        purge: true
+      with_items:
+        - node1
+        - node2
+        - node3
