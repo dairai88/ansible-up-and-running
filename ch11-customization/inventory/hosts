@@ -1,5 +1,5 @@
 [multipass]
-perconamongo[1:3]
+node[1:3]
 
 [multipass:vars]
 ansible_connection=theko2fi.multipass.multipass

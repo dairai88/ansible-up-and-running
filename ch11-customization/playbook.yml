@@ -1,7 +1,7 @@
 ---
 
 - name: Show usage of limit option
-  hosts: perconamongo1
+  hosts: node1
 
   tasks:
     - name: Greeting from targets
@@ -9,7 +9,7 @@
         msg: "Hello from {{ ansible_facts['hostname'] }}"
 
 - name: Show usage of delegate_to option
-  hosts: perconamongo1
+  hosts: node1
 
   tasks:
 
@@ -29,7 +29,7 @@
         var: result
 
 - name: Manually gathering ansible_facts
-  hosts: perconamongo1
+  hosts: node1
   gather_facts: false
   become: false
   tasks:
