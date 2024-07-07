@@ -39,3 +39,13 @@
     - name: Retrieve ip address of network interface enp0s1
       debug:
         var: ansible_enp0s1.ipv4.address
+
+- name: Upgrade 50% of web servers
+  hosts: multipass
+  serial:
+    - 1
+    - 70%
+  tasks:
+    - name: Greeting from targets
+      ansible.builtin.debug:
+        msg: "Hello from {{ ansible_facts['hostname'] }}"
