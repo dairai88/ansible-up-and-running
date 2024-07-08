@@ -2,11 +2,20 @@
 
 - name: Show usage of limit option
   hosts: node1
+  vars:
+    fruits:
+      - Apple
+      - Banana
 
   tasks:
     - name: Greeting from targets
       debug:
         msg: "Hello from {{ ansible_facts['hostname'] }}"
+
+    - name: Test if fruit is in list
+      debug:
+        msg: fruit is in list
+      when: "'Pear' in ['Pear', 'Apple']"
 
 - name: Show usage of delegate_to option
   hosts: node1
