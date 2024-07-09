@@ -1,0 +1,7 @@
+---
+- name: Imported playbook
+  hosts: node1
+  tasks:
+    - name: Show variables passed in
+      debug:
+        var: version_number

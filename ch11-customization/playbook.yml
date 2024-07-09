@@ -6,6 +6,7 @@
     fruits:
       - Apple
       - Banana
+      - Pear
 
   tasks:
     - name: Greeting from targets
@@ -15,7 +16,7 @@
     - name: Test if fruit is in list
       debug:
         msg: fruit is in list
-      when: "'Pear' in ['Pear', 'Apple']"
+      when: "'Pear' in fruits"
 
 - name: Show usage of delegate_to option
   hosts: node1
@@ -84,3 +85,17 @@
       register: ownership_output
       changed_when: ownership_output.rc != 0
       when: not key_file.stat.exists
+
+- name: Import plays from imported.yml
+  ansible.builtin.import_playbook: imported.yml
+  vars:
+    version_number: 3.1.0,
+    agent_type: "filebeat"
+  when: "'filebeat' in ['filebeat', 'metricbeat']"
+
+- name: Import plays from imported.yml
+  ansible.builtin.import_playbook: imported.yml
+  vars:
+    version_number: 3.1.0,
+    agent_type: "filebeat"
+  when: "'testbeat' in ['filebeat', 'metricbeat']"
