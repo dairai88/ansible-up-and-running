@@ -1,0 +1,26 @@
+---
+- name: Strategies
+  hosts: strategies
+  connection: local
+  strategy: free
+  gather_facts: false
+
+  tasks:
+
+    - name: First task
+      command: sleep "{{ sleep_seconds }}"
+      changed_when: false
+      tags:
+        - first
+
+    - name: Second task
+      command: sleep "{{ sleep_seconds }}"
+      changed_when: false
+      tags:
+        - second
+
+    - name: Third task
+      command: sleep "{{ sleep_seconds }}"
+      changed_when: false
+      tags:
+        - third
