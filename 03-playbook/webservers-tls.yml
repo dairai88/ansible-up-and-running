@@ -4,7 +4,6 @@
 - name: Configure webserver with Nginx and TLS
   hosts: webservers
   become: true
-  gather_facts: false
 
   vars:
     tls_dir: /etc/nginx/ssl/
@@ -54,21 +53,23 @@
         src: /etc/nginx/sites-available/default
         dest: /etc/nginx/sites-enabled/default
         state: link
+      notify: Restart nginx
 
     - name: Install home page
       template:
         src: index.html.j2
         dest: /usr/share/nginx/html/index.html
         mode: '0644'
+      notify: Restart nginx
 
     - name: Restart nginx
       meta: flush_handlers
 
-    - name: "Test it! https://localhost:8443/index.html"
+    - name: "Test it! https://{{ ansible_enp0s1.ipv4.address }}/index.html"
       delegate_to: localhost
       become: false
       uri:
-        url: 'https://localhost:8443/index.html'
+        url: 'https://{{ ansible_enp0s1.ipv4.address }}/index.html'
         validate_certs: false
         return_content: true
       register: response_out
