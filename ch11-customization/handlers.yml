@@ -1,0 +1,26 @@
+---
+- name: Handlers usage
+  hosts: localhost
+
+  handlers:
+    - name: Print message
+      command: echo handler executed
+      changed_when: true
+
+  pre_tasks:
+    - name: Echo pre pre_tasks
+      command: echo pre tasks
+      notify: Print message
+      changed_when: true
+
+  tasks:
+    - name: Echo tasks
+      command: echo tasks
+      notify: Print message
+      changed_when: true
+
+  post_tasks:
+    - name: Post tasks
+      command: echo post tasks
+      notify: Print message
+      changed_when: true
