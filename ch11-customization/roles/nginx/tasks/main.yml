@@ -1,0 +1,43 @@
+---
+- name: Ensure NGINX is installed
+  ansible.builtin.apt:
+    name: nginx
+    state: present
+    update_cache: true
+
+- name: Ensure /etc/nginx/ssl directory exists
+  ansible.builtin.file:
+    path: /etc/nginx/ssl
+    state: directory
+    mode: '0755'
+
+- name: Copy SSL certificates
+  ansible.builtin.copy:
+    src: "{{ item.src }}"
+    dest: "{{ item.dest }}"
+    owner: root
+    group: root
+    mode: '0644'
+  with_items:
+    - { src: 'files/ssl/newnginx.crt', dest: '/etc/nginx/ssl/newnginx.crt' }
+    - { src: 'files/ssl/newnginx.key', dest: '/etc/nginx/ssl/newnginx.key' }
+  notify: ssl_certs_changed
+
+- name: Copy NGINX configuration file
+  ansible.builtin.template:
+    src: nginx.conf.j2
+    dest: /etc/nginx/sites-available/default
+    owner: root
+    group: root
+    mode: '0644'
+  notify: Restart nginx
+
+- name: Install custom home page
+  ansible.builtin.template:
+    src: index.html.j2
+    dest: /usr/share/nginx/html/index.html
+    owner: root
+    group: root
+    mode: '0644'
+  notify: Restart nginx
+...

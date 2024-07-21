@@ -1,0 +1,7 @@
+---
+- name: Demo nginx configuration role usage
+  hosts: node1
+  become: true
+  roles:
+    - nginx
+...

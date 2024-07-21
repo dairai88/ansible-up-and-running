@@ -1,0 +1,35 @@
+---
+- name: Restart nginx
+  ansible.builtin.debug:
+    msg: "checking config first"
+  changed_when: true
+  notify:
+    - Check nginx configuration
+    - Restart nginx - after config check
+  listen: ssl_certs_changed
+
+- name: Reload nginx
+  ansible.builtin.debug:
+    msg: "checking config first"
+  changed_when: true
+  notify:
+    - Check nginx configuration
+    - Reload nginx - after config check
+  listen: ssl_certs_changed
+
+- name: Check nginx configuration
+  ansible.builtin.command: "nginx -t"
+  register: result
+  changed_when: "result.rc != 0"
+  check_mode: false
+
+- name: Restart nginx - after config check
+  ansible.builtin.service:
+    name: nginx
+    state: restarted
+
+- name: Reload nginx - after config check
+  ansible.builtin.service:
+    name: nginx
+    state: reloaded
+...

@@ -1,0 +1,4 @@
+---
+ssl_certs_path: /etc/ssl/certs
+ssl_keys_path: /etc/ssl/certs
+...
