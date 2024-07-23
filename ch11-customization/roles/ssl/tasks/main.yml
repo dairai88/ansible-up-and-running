@@ -1,4 +1,24 @@
 ---
 - name: Include OS specific variables
-  ansible.builtin.include_vars: "{{ ansible_os_family }}.yml"
+  include_vars: "{{ ansible_os_family }}.yml"
+
+- name: Copy SSL certs
+  copy:
+    src: "{{ item }}"
+    dest: "{{ ssl_certs_path }}"
+    owner: root
+    group: root
+    mode: '0644'
+  loop: "{{ ssl_certs }}"
+  notify: ssl_certs_changed
+
+- name: Copy SSL keys
+  copy:
+    src: "{{ item }}"
+    dest: "{{ ssl_keys_path }}"
+    owner: root
+    group: root
+    mode: '0644'
+  loop: "{{ ssl_keys }}"
+  notify: ssl_certs_changed
 ...

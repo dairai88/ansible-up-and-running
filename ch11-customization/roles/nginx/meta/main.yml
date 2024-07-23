@@ -1,4 +1,9 @@
 ---
 dependencies:
   - role: ssl
+    vars:
+      ssl_certs:
+        - files/ssl/nginx_copy.crt
+      ssl_keys:
+        - files/ssl/nginx.key
 ...
