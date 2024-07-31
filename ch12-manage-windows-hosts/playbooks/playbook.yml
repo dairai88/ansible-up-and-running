@@ -1,0 +1,21 @@
+---
+- name: Setup machine for Java development
+  hosts: windows
+  gather_facts: false
+
+  pre_tasks:
+    - name: Verifying connectivity
+      ansible.windows.win_ping:
+
+  roles:
+    - role: win_config
+      tags: config
+    - role: win_choco
+      tags: choco
+    - role: win_vscode
+      tags: vscode
+    - role: java_developer
+      tags: java
+    - role: win_updates
+      tags: updates
+...

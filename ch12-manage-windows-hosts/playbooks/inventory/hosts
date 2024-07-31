@@ -1,0 +1,10 @@
+[windows]
+windows2022 ansible_host=39.99.132.13
+
+[windows:vars]
+ansible_user=Administrator
+ansible_password=oarnud9I
+ansible_connection=winrm
+ansible_port=5986
+ansible_winrm_server_cert_validation=ignore
+ansible_winrm_scheme=https

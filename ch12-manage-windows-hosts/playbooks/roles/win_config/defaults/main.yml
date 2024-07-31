@@ -1,0 +1,4 @@
+---
+win_config_windows_features_remove:
+  - Telnet-Client
+...
