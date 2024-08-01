@@ -1,0 +1,32 @@
+---
+- name: Check for vscode
+  ansible.windows.win_stat:
+    path: 'C:\Program Files\Microsoft VS Code\Code.exe'
+  register: vscode
+
+- name: Show vscode info
+  ansible.builtin.debug:
+    var: vscode
+
+- name: Install VSCode
+  when: not vscode.stat.exists|bool
+  chocolatey.chocolatey.win_chocolatey:
+    name: "{{ win_vscode_distribution }}"
+    state: present
+  register: download_vscode
+  until: download_vscode is succeeded
+  retries: 10
+  delay: 2
+
+- name: Show download_vscode
+  ansible.builtin.debug:
+    var: download_vscode
+
+- name: Install vscode extensions
+  chocolatey.chocolatey.win_chocolatey:
+    name: "{{ item }}"
+    state: present
+  with_items: "{{ win_vscode_extensions }}"
+  retries: 10
+  delay: 2
+...

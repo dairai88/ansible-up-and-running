@@ -1,0 +1,9 @@
+---
+win_choco_uninstall_choco_packages:
+  - vim
+
+win_choco_install_choco_packages:
+  - git
+  - googlechrome
+  - maven
+...
