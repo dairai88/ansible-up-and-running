@@ -1,0 +1,7 @@
+---
+java_developer_java_major: "{{ java_developer_java_major_version }}"
+java_developer_java_minor: "{{ java_developer_java_minor_version }}"
+
+java_developer_win_java_home: "{{ java_developer_win_programs }}jdk-{{ java_developer_java_major }}.{{ java_developer_java_minor }}"
+java_developer_win_java_path: "{{ java_developer_win_programs }}jdk-{{ java_developer_java_major }}.{{ java_developer_java_minor }}\\bin"
+...

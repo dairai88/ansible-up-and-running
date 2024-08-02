@@ -1,0 +1,37 @@
+---
+- name: Install Java
+  chocolatey.chocolatey.win_chocolatey:
+    name: "{{ java_developer_jdk_package }}"
+    version: "{{ java_developer_java_major }}.{{ java_developer_java_minor }}"
+    force: true
+
+- name: Show windows program path
+  ansible.builtin.debug:
+    var: java_developer_win_java_home
+
+- name: Set Java_home
+  ansible.windows.win_environment:
+    state: present
+    name: JAVA_HOME
+    value: "{{ java_developer_win_java_home }}"
+    level: machine
+
+- name: Get the current system PATH
+  ansible.windows.win_shell: echo $env:PATH
+  register: path_result
+
+- name: Remove Java-related items from PATH
+  ansible.builtin.set_fact:
+    new_path: "{{ path_result.stdout.split(';') | reject('search', 'jdk') | join(';') }}"
+
+- name: Echo new path
+  ansible.builtin.debug:
+    var: new_path
+
+- name: Prepend Java Path to the system PATH
+  ansible.windows.win_environment:
+    name: PATH
+    value: "{{ java_developer_win_java_path }};{{ new_path }}"
+    state: present
+    level: machine
+...

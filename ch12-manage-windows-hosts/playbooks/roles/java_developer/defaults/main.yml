@@ -1,0 +1,6 @@
+---
+java_developer_jdk_package: openjdk
+java_developer_java_major_version: 20.0
+java_developer_java_minor_version: 2
+java_developer_win_programs: 'C:\Program Files\openjdk\'
+...

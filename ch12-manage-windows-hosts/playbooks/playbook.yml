@@ -14,4 +14,8 @@
       tags: choco
     - role: win_vscode
       tags: vscode
+    - role: java_developer
+      tags: java
+    - role: win_updates
+      tags: updates
 ...
