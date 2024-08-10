@@ -1,0 +1,39 @@
+---
+- name: Run Ghost locally
+  hosts: localhost
+  gather_facts: false
+  tasks:
+
+    - name: Create Nginx image
+      community.docker.docker_image:
+        build:
+          path: ./nginx
+        source: build
+        name: nginx-ghost
+        state: present
+        force_source: "{{ force_source | default(false) }}"
+        tag: "{{ tag | default('v1') }}"
+
+    - name: Create certs directory
+      ansible.builtin.file:
+        path: "./certs"
+        state: directory
+        mode: '0750'
+
+    - name: Create certs
+      ansible.builtin.command: >
+        openssl req -new -x509 -nodes -out certs/nginx.crt
+        -keyout certs/nginx.key -subj '/CN=localhost' -days 365
+      args:
+        creates: certs/nginx.crt
+      register: openssl_output
+      changed_when: >
+        openssl_output.rc == 0 and
+        ('+++++++++++++++++++++++++++++++++++++++*' in openssl_output.stderr or
+        'skipped, since certs/nginx.crt exists' not in openssl_output.stdout)
+
+    - name: Bring up services
+      community.docker.docker_compose_v2:
+        project_src: .
+        state: present
+...

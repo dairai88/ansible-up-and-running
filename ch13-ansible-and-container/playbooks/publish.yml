@@ -1,0 +1,28 @@
+---
+- name: Publish image to docker hub
+  hosts: localhost
+  gather_facts: false
+
+  vars:
+    username: sundalei
+    password: oarnud9Itest
+
+  tasks:
+    - name: Authenticate with repository
+      community.docker.docker_login:
+        username: "{{ username }}"
+        password: "{{ password }}"
+      register: result
+      tags:
+        - login
+
+    - name: Push image up
+      community.docker.docker_image:
+        name: sundalei/nginx-ghost
+        push: true
+        source: local
+        state: present
+        tag: v2
+      tags:
+        - push
+...

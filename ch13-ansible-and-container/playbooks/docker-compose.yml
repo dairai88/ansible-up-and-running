@@ -1,0 +1,21 @@
+---
+services:
+  nginx:
+    image: nginx-ghost:v1
+    ports:
+      - "8000:80"
+      - "8443:443"
+    volumes:
+      - ${PWD}/certs:/certs
+    networks:
+      - nginx-ghost
+  ghost:
+    image: ghost
+    environment:
+      NODE_ENV: development
+    networks:
+      - nginx-ghost
+
+networks:
+  nginx-ghost:
+...
