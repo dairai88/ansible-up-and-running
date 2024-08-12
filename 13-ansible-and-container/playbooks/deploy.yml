@@ -1,0 +1,36 @@
+---
+- name: Deploy database
+  hosts: mysql
+  become: true
+  gather_facts: false
+
+  handlers:
+    - name: Restart mysql
+      ansible.builtin.systemd:
+        name: mysql
+        state: restarted
+
+  tasks:
+    - name: Listen
+      ansible.builtin.lineinfile:
+        path: /etc/mysql/mysql.conf.d/mysqld.cnf
+        line: 'bind-address  = 0.0.0.0'
+        regexp: '^bind-address'
+        state: present
+      notify: Restart mysql
+
+    - name: Create database
+      community.mysql.mysql_db:
+        name: "{{ database_name }}"
+        state: present
+        login_unix_socket: /var/run/mysqld/mysqld.sock
+
+    - name: Create database user
+      community.mysql.mysql_user:
+        name: "{{ database_user }}"
+        password: "{{ database_password }}"
+        priv: '{{ database_name }}.*:ALL'
+        host: '%'
+        state: present
+        login_unix_socket: /var/run/mysqld/mysqld.sock
+...

@@ -22,7 +22,10 @@
         push: true
         source: local
         state: present
-        tag: v2
+        tag: "{{ item }}"
+      with_items:
+        - v2
+        - latest
       tags:
         - push
 ...

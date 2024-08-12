@@ -1,3 +1,5 @@
-database_name=ghost
-database_user=ghost
-database_password=mysupersecretpassword
+---
+database_name: ghost
+database_user: ghost
+database_password: mysupersecretpassword
+...

@@ -1,2 +1,8 @@
 [ghost]
 39.99.132.13 ansible_user=ecs-user
+
+[multipass]
+mysql
+
+[multipass:vars]
+ansible_connection=theko2fi.multipass.multipass
