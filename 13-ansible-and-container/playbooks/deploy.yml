@@ -33,4 +33,17 @@
         host: '%'
         state: present
         login_unix_socket: /var/run/mysqld/mysqld.sock
+
+- name: Deploy Ghost
+  hosts: ghost
+  become: true
+  gather_facts: false
+
+  vars:
+    net_name: ghostnet
+
+  tasks:
+    - name: Create network
+      community.docker.docker_network:
+        name: "{{ net_name }}"
 ...

@@ -1,4 +1,80 @@
 ---
+- name: Provision Docker VMs
+  hosts: dockerhosts
+  become: true
+
+  vars:
+    docker_ubuntu_repo: "https://mirrors.aliyun.com/docker-ce/linux/ubuntu"
+
+  tasks:
+    - name: Gather facts about the remote hosts
+      ansible.builtin.setup:
+
+    - name: Set ubuntu version variable
+      ansible.builtin.set_fact:
+        ubuntu_version: "{{ ansible_distribution_release }}"
+
+    - name: Set Docker repository URL variable
+      ansible.builtin.set_fact:
+        docker_repo_url: "{{ docker_ubuntu_repo }} {{ ubuntu_version }} stable"
+
+    - name: Display ubuntu version
+      ansible.builtin.debug:
+        var: docker_repo_url
+
+    - name: Install packages
+      ansible.builtin.apt:
+        name: "{{ item }}"
+        update_cache: true
+        cache_valid_time: 3600
+      loop:
+        - apt-transport-https
+        - ca-certificates
+        - curl
+        - gpg-agent
+        - python3-pip
+        - software-properties-common
+
+    - name: Add an apt signing key for Docker
+      ansible.builtin.apt_key:
+        url: https://mirrors.aliyun.com/docker-ce/linux/ubuntu/gpg
+        state: present
+
+    - name: Add apt repository for stable version
+      ansible.builtin.apt_repository:
+        repo: "deb [arch=amd64] {{ docker_repo_url }}"
+        state: present
+
+    - name: Update APT package index again
+      ansible.builtin.apt:
+        update_cache: true
+
+    - name: Install Docker
+      ansible.builtin.apt:
+        name: docker-ce
+        state: present
+      loop:
+        - docker-ce
+        - docker-ce-cli
+        - containerd.io
+
+    - name: Ensure Docker service is running
+      ansible.builtin.service:
+        name: docker
+        state: started
+        enabled: true
+
+    - name: Install Docker python client
+      pip:
+        name: docker
+        state: present
+
+    - name: Grant docker to user specified by ansible_user
+      ansible.builtin.user:
+        name: "{{ ansible_user }}"
+        groups: docker
+        append: true
+
 - name: Provision database machine
   hosts: mysql
   become: true
