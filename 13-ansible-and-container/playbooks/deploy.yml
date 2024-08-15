@@ -1,8 +1,8 @@
 ---
 - name: Deploy database
-  hosts: mysql
+  hosts: database
   become: true
-  gather_facts: false
+  gather_facts: true
 
   handlers:
     - name: Restart mysql
@@ -11,6 +11,10 @@
         state: restarted
 
   tasks:
+    - name: Get database server ip
+      ansible.builtin.set_fact:
+        database_host: "{{ ansible_enp0s1.ipv4.address }}"
+
     - name: Listen
       ansible.builtin.lineinfile:
         path: /etc/mysql/mysql.conf.d/mysqld.cnf
@@ -37,13 +41,53 @@
 - name: Deploy Ghost
   hosts: ghost
   become: true
-  gather_facts: false
+  gather_facts: true
 
   vars:
+    data_dir: /data/ghostdata
     net_name: ghostnet
 
   tasks:
     - name: Create network
       community.docker.docker_network:
         name: "{{ net_name }}"
+
+    - name: Set database host
+      ansible.builtin.set_fact:
+        database_host: "{{ hostvars['mysql']['database_host'] }}"
+
+    - name: Set ghost host
+      ansible.builtin.set_fact:
+        ghost_host: "{{ ansible_enp0s1.ipv4.address }}"
+
+    - name: Display database server ip
+      ansible.builtin.debug:
+        var: database_host
+
+    - name: Display ghost server ip
+      ansible.builtin.debug:
+        var: ghost_host
+
+    - name: Create ghostdata directory
+      ansible.builtin.file:
+        path: "{{ data_dir }}"
+        state: directory
+        mode: "0750"
+
+    - name: Start ghost container
+      community.docker.docker_container:
+        name: ghost
+        image: ghost
+        networks:
+          - name: "{{ net_name }}"
+        volumes:
+          - "{{ data_dir }}:/var/lib/ghost/content"
+        env:
+          database__client: mysql
+          database__connection__host: "{{ database_host }}"
+          database__connection__user: "{{ database_user }}"
+          database__connection__password: "{{ database_password }}"
+          database__connection__database: "{{ database_name }}"
+          url: "https://{{ ghost_host }}"
+          NODE_ENV: production
 ...

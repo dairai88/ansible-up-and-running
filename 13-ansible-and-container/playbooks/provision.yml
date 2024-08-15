@@ -5,6 +5,7 @@
 
   vars:
     docker_ubuntu_repo: "https://mirrors.aliyun.com/docker-ce/linux/ubuntu"
+    default_user: ubuntu
 
   tasks:
     - name: Gather facts about the remote hosts
@@ -18,9 +19,25 @@
       ansible.builtin.set_fact:
         docker_repo_url: "{{ docker_ubuntu_repo }} {{ ubuntu_version }} stable"
 
+    - name: Set system architecture
+      ansible.builtin.set_fact:
+        arch: "{{ ansible_architecture }}"
+
+    - name: Set target user to whom docker group is assigned
+      ansible.builtin.set_fact:
+        target_user: "{{ ansible_user | default(default_user) }}"
+
+    - name: Display system architecture
+      ansible.builtin.debug:
+        var: arch
+
     - name: Display ubuntu version
       ansible.builtin.debug:
         var: docker_repo_url
+
+    - name: Display target user
+      ansible.builtin.debug:
+        var: target_user
 
     - name: Install packages
       ansible.builtin.apt:
@@ -42,7 +59,7 @@
 
     - name: Add apt repository for stable version
       ansible.builtin.apt_repository:
-        repo: "deb [arch=amd64] {{ docker_repo_url }}"
+        repo: "{% if arch == 'aarch64' %}deb [arch=arm64] {{ docker_repo_url }}{% else %}deb [arch=amd64] {{ docker_repo_url }}{% endif %}"
         state: present
 
     - name: Update APT package index again
@@ -71,7 +88,7 @@
 
     - name: Grant docker to user specified by ansible_user
       ansible.builtin.user:
-        name: "{{ ansible_user }}"
+        name: "{{ target_user }}"
         groups: docker
         append: true
 

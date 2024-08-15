@@ -1,14 +1,11 @@
-[aliyun]
-ghost ansible_host=39.99.132.13
+[dockerhosts]
+ghost
 
-[aliyun:vars]
-ansible_user=ecs-user
-
-[multipass]
+[database]
 mysql
 
-[multipass:vars]
+[dockerhosts:vars]
 ansible_connection=theko2fi.multipass.multipass
 
-[dockerhosts:children]
-aliyun
+[database:vars]
+ansible_connection=theko2fi.multipass.multipass
