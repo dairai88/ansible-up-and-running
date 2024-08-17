@@ -45,6 +45,7 @@
 
   vars:
     data_dir: /data/ghostdata
+    certs_dir: /data/certs
     net_name: ghostnet
 
   tasks:
@@ -90,4 +91,37 @@
           database__connection__database: "{{ database_name }}"
           url: "https://{{ ghost_host }}"
           NODE_ENV: production
+
+    - name: Create certs directory
+      ansible.builtin.file:
+        path: "{{ certs_dir }}"
+        state: directory
+        mode: "0750"
+
+    - name: Display host
+      ansible.builtin.debug:
+        var: ansible_host
+
+    - name: Generate tls certs
+      ansible.builtin.command: >
+        openssl req -new -x509 -nodes
+        -out "{{ certs_dir }}/nginx.crt"
+        -keyout "{{ certs_dir }}/nginx.key"
+        -subj "/CN={{ ansible_host }}" -days 3650
+      args:
+        creates: "{{ certs_dir }}/nginx.crt"
+      register: cert_result
+      changed_when: ('nginx.crt exists' not in cert_result.stdout)
+
+    - name: Start nginx container
+      community.docker.docker_container:
+        name: nginx-ghost
+        image: sundalei/nginx-ghost
+        networks:
+          - name: "{{ net_name }}"
+        ports:
+          - "80:80"
+          - "443:443"
+        volumes:
+          - "{{ certs_dir }}:/certs"
 ...
