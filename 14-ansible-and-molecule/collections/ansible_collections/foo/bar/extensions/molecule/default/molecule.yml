@@ -1,4 +1,7 @@
 ---
+dependency:
+  enabled: true
+  name: galaxy
 driver:
   name: default
 platforms:

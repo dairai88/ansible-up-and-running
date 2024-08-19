@@ -1,0 +1,11 @@
+roles:
+  - name: hybridadmin.fancy_console
+    version: master
+  - name: madudka.nginx
+    version: master
+  - name: iampsrv.flask
+    version: master
+
+collections:
+  - wenerme.alpine
+
