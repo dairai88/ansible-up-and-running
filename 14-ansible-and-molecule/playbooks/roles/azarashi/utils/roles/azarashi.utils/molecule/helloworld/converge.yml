@@ -1,0 +1,37 @@
+---
+- name: Fail if molecule group is missing
+  hosts: localhost
+  tasks:
+    - name: Print inventory groups info
+      ansible.builtin.debug:
+        msg: "{{ groups }}"
+
+    - name: Assert molecule group existence
+      ansible.builtin.assert:
+        that:
+          - "'molecule' in groups"
+        fail_msg: |
+          molecule group was not found inside inventory groups: {{ groups }}
+
+- name: Converge
+  hosts: molecule
+  gather_facts: false
+  tasks:
+    - name: Check uname
+      ansible.builtin.raw: uname -a
+      register: result
+      changed_when: false
+
+    - name: Display uname
+      ansible.builtin.debug:
+        var: result.stdout
+
+    - name: Assert uname info
+      ansible.builtin.assert:
+        that:
+          - result.stdout | regex_search("^Linux")
+
+    - name: Azarashi's Testing role
+      ansible.builtin.include_role:
+        name: azarashi.utils
+        tasks_from: main.yml

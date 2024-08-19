@@ -1,0 +1,5 @@
+---
+- name: Test failed
+  ansible.builtin.debug:
+    msg: Test failed
+...
