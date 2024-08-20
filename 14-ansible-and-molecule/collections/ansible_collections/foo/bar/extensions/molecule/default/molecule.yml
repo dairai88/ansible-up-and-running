@@ -1,11 +1,10 @@
 ---
-dependency:
-  enabled: true
-  name: galaxy
 driver:
   name: default
 platforms:
-  - name: instance
-    # you might want to add your own variables here based on what provisioning
-    # you are doing like:
-    # image: quay.io/centos/centos:stream8
+  - name: conda_centos7
+    image: centos:7
+provisioner:
+  name: ansible
+  playbooks:
+    create: create.yml

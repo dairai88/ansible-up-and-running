@@ -1,3 +1,9 @@
 ---
-- name: Include a playbook from a collection
-  ansible.builtin.import_playbook: foo.bar.my_playbook
+- name: Converge
+  hosts: all
+  gather_facts: false
+  tasks:
+    - name: Testing foo.bar.my_role
+      ansible.builtin.include_role:
+        name: foo.bar.my_role
+        tasks_from: main.yml
