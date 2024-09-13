@@ -1,0 +1,56 @@
+---
+- name: Provision an instance
+  hosts: localhost
+  connection: local
+  vars:
+    molecule_inventory:
+      all:
+        hosts: {}
+        children:
+          molecule: {}
+
+  tasks:
+    - name: Create a Multipass VM
+      theko2fi.multipass.multipass_vm:
+        name: web
+        cpus: 2
+        memory: 2G
+        disk: 8G
+        state: started
+
+    - name: Add multipass instance to molecule inventory
+      vars:
+        inventory_partial_yaml: >
+          molecule:
+            hosts:
+              web:
+                ansible_connection: theko2fi.multipass.multipass
+                ansible_python_interpreter: /usr/bin/python3
+      ansible.builtin.set_fact:
+        molecule_inventory: >
+          {{ molecule_inventory | combine(inventory_partial_yaml | from_yaml) }}
+
+    - name: Dump molecule_inventory
+      ansible.builtin.copy:
+        content: |
+          {{ molecule_inventory | to_yaml }}
+        dest: "{{ molecule_ephemeral_directory }}/inventory/molecule_inventory.yml"
+        mode: "0600"
+
+    - name: Force inventory refresh
+      ansible.builtin.meta: refresh_inventory
+
+    - name: Fail if molecule group is missing
+      ansible.builtin.assert:
+        that:
+          - "'molecule' in groups"
+        fail_msg: |
+          molecule group was not found inside inventory groups: {{ groups }}
+      run_once: true # noqa: run-once[task]
+
+- name: Validate that inventory was refreshed
+  hosts: molecule
+  gather_facts: false
+  tasks:
+    - name: Connection success
+      ansible.builtin.ping:
