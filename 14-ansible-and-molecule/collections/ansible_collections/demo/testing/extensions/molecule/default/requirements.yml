@@ -2,6 +2,3 @@
 roles:
   - name: nginxinc.nginx
     version: 0.24.3
-collections:
-  - name: theko2fi.multipass
-    version: 0.3.0

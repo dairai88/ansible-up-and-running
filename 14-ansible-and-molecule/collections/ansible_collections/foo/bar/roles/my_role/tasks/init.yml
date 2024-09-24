@@ -1,3 +1,0 @@
-- name: Task init from within the role
-  ansible.builtin.debug:
-    msg: "Task init from my_role."
