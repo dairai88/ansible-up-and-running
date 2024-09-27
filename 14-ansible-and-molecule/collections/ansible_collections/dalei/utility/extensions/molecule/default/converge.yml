@@ -1,0 +1,8 @@
+---
+- name: Converge
+  hosts: all
+  tasks:
+    - name: Testing role of dalei.utility.miniconda
+      ansible.builtin.include_role:
+        name: dalei.utility.miniconda
+        tasks_from: main.yml

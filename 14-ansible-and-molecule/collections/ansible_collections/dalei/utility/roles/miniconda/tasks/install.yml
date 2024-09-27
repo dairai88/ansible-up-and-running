@@ -1,0 +1,47 @@
+---
+
+# Mac
+- name: Install miniconda on macos
+  become: false
+  command: /usr/local/bin/brew install miniconda
+  when:
+    - ansible_os_family == 'Darwin'
+  changed_when: false
+
+# Debian Linux
+- name: Debian
+  when: ansible_os_family == 'Debian'
+  block:
+    - name: Install gpg
+      ansible.builtin.apt:
+        update_cache: true
+        name: gnupg
+        state: present
+
+    - name: Install conda apt gpg key
+      ansible.builtin.apt_key:
+        state: present
+        url: "https://repo.anaconda.com/pkgs/misc/gpgkeys/anaconda.asc"
+
+    - name: Install conda debian repo
+      ansible.builtin.apt_repository:
+        repo: 'deb https://repo.anaconda.com/pkgs/misc/debrepo/conda stable main'
+        filename: conda.list
+
+# RedHat Linux
+- name: RedHat
+  when: ansible_os_family == 'RedHat'
+  block:
+    - name: Install conda rpm gpg key
+      ansible.builtin.rpm_key:
+        state: present
+        key: 'https://repo.anaconda.com/pkgs/misc/gpgkeys/anaconda.asc'
+
+    - name: Install conda yum repo
+      ansible.builtin.copy:
+        src: conda.repo
+        dest: /etc/yum.repos.d
+        owner: root
+        group: root
+        mode: '0644'
+...

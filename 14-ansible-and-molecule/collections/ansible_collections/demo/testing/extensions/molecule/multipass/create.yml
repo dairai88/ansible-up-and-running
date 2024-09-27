@@ -1,5 +1,5 @@
 ---
-- name: Provision an instance
+- name: Provision and configure a multipass instance
   hosts: localhost
   connection: local
   vars:
@@ -10,7 +10,7 @@
           molecule: {}
 
   tasks:
-    - name: Create a Multipass VM
+    - name: Create a multipass instance
       theko2fi.multipass.multipass_vm:
         name: web
         cpus: 2

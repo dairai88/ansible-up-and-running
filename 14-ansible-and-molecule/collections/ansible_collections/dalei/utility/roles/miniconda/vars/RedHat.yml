@@ -1,0 +1,4 @@
+---
+# RedHat
+miniconda_bindir: /opt/conda/bin
+...
