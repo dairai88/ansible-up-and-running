@@ -4,6 +4,6 @@ driver:
 platforms:
   - name: ubuntu-instance
     image: ubuntu:noble
-    pre_build_image: true
+    dockerfile: ./Dockerfile.j2
 provisioner:
   name: ansible

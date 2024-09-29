@@ -1,2 +1,4 @@
 ---
 # defaults file for miniconda
+miniconda_installer_sh: 'Miniconda3-latest-Linux-aarch64.sh'
+miniconda_installer_url: 'https://repo.anaconda.com/miniconda/{{ miniconda_installer_sh }}'

@@ -8,40 +8,56 @@
     - ansible_os_family == 'Darwin'
   changed_when: false
 
-# Debian Linux
-- name: Debian
-  when: ansible_os_family == 'Debian'
+# Linux
+- name: Install miniconda on Linux
+  when: ansible_os_family in ['RedHat', 'Debian']
   block:
-    - name: Install gpg
-      ansible.builtin.apt:
-        update_cache: true
-        name: gnupg
+    - name: Ensure required packages are installed
+      ansible.builtin.package:
+        name:
+          - wget
+          - bzip2
         state: present
 
-    - name: Install conda apt gpg key
-      ansible.builtin.apt_key:
+    - name: Download installer
+      ansible.builtin.get_url:
+        url: "{{ miniconda_installer_url }}"
+        dest: "/tmp/{{ miniconda_installer_sh }}"
+        mode: '0755'
+
+    - name: Run miniconda installer script
+      ansible.builtin.command: /tmp/{{ miniconda_installer_sh }} -b -p {{ miniconda_dir }}
+      args:
+        creates: "{{ miniconda_bindir }}"
+
+    - name: Delete miniconda installer
+      ansible.builtin.file:
+        path: "/tmp/{{ miniconda_installer_sh }}"
+        state: absent
+
+    - name: Initialize conda for all users
+      ansible.builtin.shell: "{{ miniconda_bindir }}/conda init"
+      args:
+        executable: /bin/bash
+      changed_when: true
+
+    - name: Source conda.sh in /etc/bash.bashrc
+      ansible.builtin.blockinfile:
+        path: "/etc/bash.bashrc"
         state: present
-        url: "https://repo.anaconda.com/pkgs/misc/gpgkeys/anaconda.asc"
+        block: |
+          # Initialize miniconda
+          .  {{ miniconda_dir }}/etc/profile.d/conda.sh
+        marker: '# {mark} ANSIBLE MANAGED BLOCK base_conda'
+      when: ansible_os_family == 'Debian'
 
-    - name: Install conda debian repo
-      ansible.builtin.apt_repository:
-        repo: 'deb https://repo.anaconda.com/pkgs/misc/debrepo/conda stable main'
-        filename: conda.list
-
-# RedHat Linux
-- name: RedHat
-  when: ansible_os_family == 'RedHat'
-  block:
-    - name: Install conda rpm gpg key
-      ansible.builtin.rpm_key:
+    - name: Source conda.sh in /etc/bash.bashrc
+      ansible.builtin.blockinfile:
+        path: "/etc/bashrc"
         state: present
-        key: 'https://repo.anaconda.com/pkgs/misc/gpgkeys/anaconda.asc'
-
-    - name: Install conda yum repo
-      ansible.builtin.copy:
-        src: conda.repo
-        dest: /etc/yum.repos.d
-        owner: root
-        group: root
-        mode: '0644'
+        block: |
+          # Initialize miniconda
+          .  {{ miniconda_dir }}/etc/profile.d/conda.sh
+        marker: '# {mark} ANSIBLE MANAGED BLOCK base_conda'
+      when: ansible_os_family == 'RedHat'
 ...
