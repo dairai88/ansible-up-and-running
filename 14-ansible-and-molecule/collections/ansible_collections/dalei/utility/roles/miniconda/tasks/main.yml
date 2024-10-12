@@ -13,14 +13,15 @@
     path: "{{ miniconda_bindir }}/conda"
   register: conda_executable
 
-- name: Show conda presence
-  ansible.builtin.debug:
-    var: conda_executable
-
 - name: Install miniconda
   ansible.builtin.include_tasks: install.yml
   when: ansible_os_family == 'Windows' or not conda_executable.stat.exists
 
-- name: Task is running from within the role
+- name: Show conda help
+  ansible.builtin.command: "{{ miniconda_bindir }}/conda --help"
+  changed_when: false
+  register: result
+
+- name: Show conda result
   ansible.builtin.debug:
-    msg: "This is a task from miniconda role."
+    var: result
