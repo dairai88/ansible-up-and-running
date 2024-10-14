@@ -1,0 +1,8 @@
+[vagrant]
+ubuntu ansible_host=127.0.0.1 ansible_port=2222
+fedora ansible_host=127.0.0.1 ansible_port=2200
+
+[vagrant:vars]
+ansible_user=vagrant
+ansible_python_interpreter=/usr/bin/python3
+ansible_private_key_file=/Users/daleisun/.vagrant.d/insecure_private_keys/vagrant.key.ed25519

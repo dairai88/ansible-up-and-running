@@ -1,0 +1,25 @@
+Vagrant.configure("2") do |config|
+
+    config.vm.box = "bento/ubuntu-20.04-arm64"
+
+    # Use the default insecure key for these machine
+    config.ssh.insert_key = false
+
+    # Use ssh-agent for cloning from Github.com
+    config.ssh.forward_agent = true
+    # disable guest additions
+    config.vm.synced_folder '.', '/vagrant', disabled: true
+
+    config.vm.define "ubuntu" do |ubuntu|
+        ubuntu.vm.box = "bento/ubuntu-22.04-arm64"
+    end
+
+    config.vm.define "fedora" do |fedora|
+        fedora.vm.box = "bento/fedora-39-arm64"
+    end
+
+    config.vm.define "debian" do |debian|
+        debian.vm.box = "bento/debian-12.4-arm64"
+    end
+
+end

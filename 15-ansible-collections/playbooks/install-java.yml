@@ -1,0 +1,21 @@
+---
+- name: Install Java
+  hosts: vagrant
+
+  tasks:
+    - name: Display os info
+      ansible.builtin.debug:
+        msg: "{{ ansible_distribution ~ '-' ~ ansible_distribution_major_version }}"
+
+    - name: Display os family
+      ansible.builtin.debug:
+        var: ansible_os_family
+
+    - name: Display java info
+      ansible.builtin.debug:
+        var: java_version
+
+    - name: Using role from dalei.utility
+      ansible.builtin.import_role:
+        name: dalei.utility.java
+...
